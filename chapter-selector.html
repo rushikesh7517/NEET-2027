@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>NEET 2027 — Chapter Selection Sheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap');
+
+  :root{
+    --paper: #f6f3ec;
+    --paper-line: #d8d2c2;
+    --ink: #1f2a24;
+    --ink-soft: #5b6a5f;
+    --bio: #2f5d4f;
+    --bio-fill: #e4ece6;
+    --phy: #2f4a6b;
+    --phy-fill: #e3e9f0;
+    --chem: #7a3b2e;
+    --chem-fill: #f2e5df;
+    --accent: #b5482f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background: var(--paper);
+    background-image: repeating-linear-gradient(transparent, transparent 34px, var(--paper-line) 35px);
+    color: var(--ink);
+    font-family:'Source Serif 4', serif;
+    padding: 24px 16px 130px;
+  }
+  .sheet{ max-width: 640px; margin: 0 auto; }
+
+  .hero{
+    display:flex; align-items:center; gap:16px;
+    opacity:0; transform: translateY(14px);
+    animation: rise .6s ease forwards;
+  }
+  @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+
+  .illo{ width: 84px; height: 84px; flex-shrink:0; animation: float 3.4s ease-in-out infinite; }
+  @keyframes float{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-6px);} }
+
+  header{ border-bottom: 3px double var(--ink); padding-bottom: 14px; margin-bottom: 22px; flex:1; }
+  .eyebrow{
+    font-family:'Space Mono', monospace; font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 6px;
+  }
+  h1{ font-size: 25px; margin: 0 0 6px; font-weight: 700; line-height: 1.15; }
+  .sub{ font-size: 14px; color: var(--ink-soft); margin: 0; }
+
+  .quota-bar{ display:flex; gap:10px; margin: 18px 0 24px; font-family:'Space Mono', monospace; font-size: 12.5px; }
+  .quota{ flex:1; border:1.5px solid var(--ink); border-radius: 3px; padding: 9px 10px; background: #fff;
+    display:flex; justify-content:space-between; align-items:center; transition: background .2s, color .2s; }
+  .quota.bio{ border-color: var(--bio); color: var(--bio); }
+  .quota.phy{ border-color: var(--phy); color: var(--phy); }
+  .quota.chem{ border-color: var(--chem); color: var(--chem); }
+  .quota .count{ font-weight:700; }
+  .quota.done{ background: currentColor; }
+  .quota.done span{ color: #fff !important; }
+
+  section.subject{ margin-bottom: 26px; opacity:0; transform: translateY(10px); animation: rise .6s ease forwards; }
+  section.subject:nth-of-type(1){ animation-delay: .08s; }
+  section.subject:nth-of-type(2){ animation-delay: .16s; }
+  section.subject:nth-of-type(3){ animation-delay: .24s; }
+
+  .subject-head{ display:flex; align-items:baseline; gap:8px; margin-bottom: 10px; }
+  .subject-head .tag{ font-family:'Space Mono', monospace; font-size: 11px; font-weight:700; padding: 2px 7px; border-radius: 2px; color:#fff; }
+  .tag.bio{ background: var(--bio); }
+  .tag.phy{ background: var(--phy); }
+  .tag.chem{ background: var(--chem); }
+  .subject-head h2{ font-size: 16px; margin:0; font-weight:600; }
+  .subject-head .need{ font-size:12px; color:var(--ink-soft); margin-left:auto; font-family:'Space Mono',monospace;}
+
+  .class-block{ margin-bottom: 10px; }
+  .class-label{ font-size: 12px; color: var(--ink-soft); font-style: italic; margin: 8px 0 6px 2px; }
+
+  .chap{ display:flex; align-items:flex-start; gap:10px; padding: 8px 10px; margin-bottom: 4px;
+    border: 1px solid transparent; border-radius: 3px; cursor:pointer;
+    transition: background .12s, border-color .12s, transform .12s; font-size: 14.5px; line-height:1.3; }
+  .chap:hover{ background: rgba(0,0,0,0.03); }
+  .chap.checked{ animation: pop .25s ease; }
+  @keyframes pop{ 0%{ transform: scale(1);} 40%{ transform: scale(1.02);} 100%{ transform: scale(1);} }
+  .chap.checked.bio{ background: var(--bio-fill); border-color: var(--bio); }
+  .chap.checked.phy{ background: var(--phy-fill); border-color: var(--phy); }
+  .chap.checked.chem{ background: var(--chem-fill); border-color: var(--chem); }
+  .chap.disabled{ opacity: 0.35; cursor: not-allowed; }
+
+  .bubble{ flex-shrink:0; width: 18px; height: 18px; margin-top: 1px; border: 1.5px solid var(--ink);
+    border-radius: 50%; display:flex; align-items:center; justify-content:center;
+    font-family:'Space Mono',monospace; font-size:10px; transition: background .15s, border-color .15s; }
+  .chap.checked .bubble.bio{ background: var(--bio); border-color: var(--bio); color:#fff; }
+  .chap.checked .bubble.phy{ background: var(--phy); border-color: var(--phy); color:#fff; }
+  .chap.checked .bubble.chem{ background: var(--chem); border-color: var(--chem); color:#fff; }
+
+  footer.bar{ position: fixed; left:0; right:0; bottom:0; background: var(--paper); border-top: 3px double var(--ink);
+    padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); }
+  .footer-inner{ max-width: 640px; margin:0 auto; display:flex; align-items:center; gap:12px; }
+  .status{ font-family:'Space Mono', monospace; font-size: 12.5px; color: var(--ink-soft); flex:1; }
+  .status strong{ color: var(--ink); }
+  button.send{ font-family:'Space Mono', monospace; font-weight:700; font-size: 13px; letter-spacing: 0.04em;
+    text-transform: uppercase; background: var(--accent); color:#fff; border:none; padding: 13px 20px;
+    border-radius: 3px; cursor:pointer; transition: transform .1s, background .15s; white-space: nowrap; }
+  button.send:disabled{ background: #b8b2a2; cursor:not-allowed; }
+  button.send:not(:disabled):active{ transform: scale(0.97); }
+
+  .copyright{ text-align:center; font-family:'Space Mono', monospace; font-size: 10.5px; color: var(--ink-soft);
+    margin: 30px 0 0; letter-spacing: .02em; }
+
+  @media (max-width: 400px){
+    h1{ font-size: 21px; }
+    .footer-inner{ flex-direction: column; align-items: stretch; }
+    button.send{ width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="hero">
+    <svg class="illo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="48" fill="#eadfce"/>
+      <ellipse cx="50" cy="92" rx="30" ry="5" fill="#00000010"/>
+      <path d="M32 88 Q30 55 40 45 Q50 38 60 45 Q70 55 68 88 Z" fill="#2f5d4f"/>
+      <circle cx="50" cy="34" r="16" fill="#3a2a20"/>
+      <circle cx="50" cy="37" r="13" fill="#e8b48c"/>
+      <path d="M35 32 Q34 18 50 17 Q66 18 65 32 Q65 24 50 23 Q35 24 35 32 Z" fill="#2b1c14"/>
+      <rect x="30" y="70" width="40" height="6" rx="2" fill="#b5482f"/>
+      <rect x="34" y="64" width="32" height="7" rx="1.5" fill="#f6f3ec" stroke="#1f2a24" stroke-width="1"/>
+      <line x1="50" y1="64" x2="50" y2="71" stroke="#1f2a24" stroke-width="0.8"/>
+    </svg>
+    <header>
+      <div class="eyebrow">NEET 2027 · For Shreya</div>
+      <h1>Chapter Selection Sheet</h1>
+      <p class="sub">Pick 3 Bio, 2 Physics, 2 Chemistry — then send. Good luck!</p>
+    </header>
+  </div>
+
+  <div class="quota-bar">
+    <div class="quota bio" id="quota-bio"><span>BIO</span><span class="count" id="count-bio">0/3</span></div>
+    <div class="quota phy" id="quota-phy"><span>PHY</span><span class="count" id="count-phy">0/2</span></div>
+    <div class="quota chem" id="quota-chem"><span>CHEM</span><span class="count" id="count-chem">0/2</span></div>
+  </div>
+
+  <div id="subjects"></div>
+
+  <div class="copyright">© 2026 Rushikesh Gilbile. All rights reserved.</div>
+</div>
+
+<footer class="bar">
+  <div class="footer-inner">
+    <div class="status" id="status">Select <strong>3 Bio · 2 Phy · 2 Chem</strong> to continue</div>
+    <button class="send" id="sendBtn" disabled>Send on WhatsApp</button>
+  </div>
+</footer>
+
+<script>
+const DATA = {
+  bio: { label: "Biology", limit: 3, classes: {
+      "Class 11": ["The Living World","Biological Classification","Plant Kingdom","Animal Kingdom","Morphology of Flowering Plants","Anatomy of Flowering Plants","Structural Organisation in Animals","Cell: The Unit of Life","Biomolecules","Cell Cycle and Cell Division","Transport in Plants","Mineral Nutrition","Photosynthesis in Higher Plants","Respiration in Plants","Plant Growth and Development","Digestion and Absorption","Breathing and Exchange of Gases","Body Fluids and Circulation","Excretory Products and their Elimination","Locomotion and Movement","Neural Control and Coordination","Chemical Coordination and Integration"],
+      "Class 12": ["Sexual Reproduction in Flowering Plants","Human Reproduction","Reproductive Health","Principles of Inheritance and Variation","Molecular Basis of Inheritance","Evolution","Human Health and Disease","Microbes in Human Welfare","Biotechnology: Principles and Processes","Biotechnology and its Applications","Organisms and Populations","Ecosystem","Biodiversity and Conservation"]
+  }},
+  phy: { label: "Physics", limit: 2, classes: {
+      "Class 11": ["Units and Measurement","Motion in a Straight Line","Motion in a Plane","Laws of Motion","Work, Energy and Power","System of Particles and Rotational Motion","Gravitation","Mechanical Properties of Solids","Mechanical Properties of Fluids","Thermal Properties of Matter","Thermodynamics","Kinetic Theory","Oscillations","Waves"],
+      "Class 12": ["Electric Charges and Fields","Electrostatic Potential and Capacitance","Current Electricity","Moving Charges and Magnetism","Magnetism and Matter","Electromagnetic Induction","Alternating Current","Electromagnetic Waves","Ray Optics and Optical Instruments","Wave Optics","Dual Nature of Radiation and Matter","Atoms","Nuclei","Semiconductor Electronics"]
+  }},
+  chem: { label: "Chemistry", limit: 2, classes: {
+      "Class 11": ["Some Basic Concepts of Chemistry","Structure of Atom","Classification of Elements and Periodicity","Chemical Bonding and Molecular Structure","States of Matter","Thermodynamics","Equilibrium","Redox Reactions","Organic Chemistry — Basic Principles and Techniques","Hydrocarbons"],
+      "Class 12": ["Solutions","Electrochemistry","Chemical Kinetics","p-Block Elements","d- and f-Block Elements","Coordination Compounds","Haloalkanes and Haloarenes","Alcohols, Phenols and Ethers","Aldehydes, Ketones and Carboxylic Acids","Amines","Biomolecules","Polymers","Chemistry in Everyday Life"]
+  }}
+};
+
+const WHATSAPP_NUMBER = "917517907051";
+const selected = { bio: [], phy: [], chem: [] };
+const container = document.getElementById('subjects');
+
+Object.entries(DATA).forEach(([key, subj]) => {
+  const sec = document.createElement('section');
+  sec.className = 'subject';
+  const head = document.createElement('div');
+  head.className = 'subject-head';
+  head.innerHTML = `<span class="tag ${key}">${key.toUpperCase()}</span><h2>${subj.label}</h2><span class="need">pick ${subj.limit}</span>`;
+  sec.appendChild(head);
+
+  Object.entries(subj.classes).forEach(([cls, chapters]) => {
+    const block = document.createElement('div');
+    block.className = 'class-block';
+    const lbl = document.createElement('div');
+    lbl.className = 'class-label';
+    lbl.textContent = cls;
+    block.appendChild(lbl);
+
+    chapters.forEach(name => {
+      const row = document.createElement('div');
+      row.className = 'chap ' + key;
+      row.dataset.subj = key;
+      row.dataset.name = name;
+      row.innerHTML = `<span class="bubble ${key}"></span><span class="label">${name}</span>`;
+      row.addEventListener('click', () => toggle(row));
+      block.appendChild(row);
+    });
+    sec.appendChild(block);
+  });
+  container.appendChild(sec);
+});
+
+function toggle(row){
+  const subj = row.dataset.subj;
+  const name = row.dataset.name;
+  const isChecked = row.classList.contains('checked');
+  const limit = DATA[subj].limit;
+  if (!isChecked && selected[subj].length >= limit) return;
+  if (isChecked){
+    row.classList.remove('checked');
+    selected[subj] = selected[subj].filter(n => n !== name);
+  } else {
+    row.classList.add('checked');
+    selected[subj].push(name);
+  }
+  refresh();
+}
+
+function refresh(){
+  ['bio','phy','chem'].forEach(subj => {
+    const limit = DATA[subj].limit;
+    const n = selected[subj].length;
+    document.getElementById('count-' + subj).textContent = `${n}/${limit}`;
+    document.getElementById('quota-' + subj).classList.toggle('done', n === limit);
+    document.querySelectorAll(`.chap.${subj}`).forEach(row => {
+      const checked = row.classList.contains('checked');
+      row.classList.toggle('disabled', !checked && n >= limit);
+    });
+  });
+  const done = selected.bio.length === 3 && selected.phy.length === 2 && selected.chem.length === 2;
+  const btn = document.getElementById('sendBtn');
+  const status = document.getElementById('status');
+  btn.disabled = !done;
+  status.innerHTML = done
+    ? `<strong>7 of 7 selected</strong> — ready to send`
+    : `Select <strong>${3-selected.bio.length} more Bio · ${2-selected.phy.length} more Phy · ${2-selected.chem.length} more Chem</strong>`;
+}
+
+document.getElementById('sendBtn').addEventListener('click', () => {
+  const lines = [
+    "NEET 2027 — Shreya's Practice Paper Picks", "",
+    "Biology:", ...selected.bio.map((n,i) => `${i+1}. ${n}`), "",
+    "Physics:", ...selected.phy.map((n,i) => `${i+1}. ${n}`), "",
+    "Chemistry:", ...selected.chem.map((n,i) => `${i+1}. ${n}`)
+  ];
+  const text = encodeURIComponent(lines.join("\n"));
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank');
+});
+
+refresh();
+</script>
+</body>
+</html>

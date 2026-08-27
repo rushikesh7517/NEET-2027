@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>NEET 2027 — Trial Test (5 Q)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap');
+  :root{
+    --paper:#f6f3ec; --ink:#1f2a24; --ink-soft:#5b6a5f;
+    --accent:#b5482f; --ok:#2f5d4f; --bad:#a12f2f; --line:#d8d2c2;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:'Source Serif 4',serif; padding:20px 16px 30px; }
+  .wrap{ max-width:600px; margin:0 auto; }
+
+  .topbar{ display:flex; justify-content:space-between; align-items:center;
+    border-bottom:3px double var(--ink); padding-bottom:12px; margin-bottom:20px; }
+  .title{ }
+  .eyebrow{ font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+  h1{ font-size:20px; margin:4px 0 0; }
+  .timer{ font-family:'Space Mono',monospace; font-size: 22px; font-weight:700; border:2px solid var(--ink);
+    border-radius: 4px; padding: 6px 12px; background:#fff; transition: color .2s, border-color .2s; }
+  .timer.low{ color:var(--bad); border-color:var(--bad); animation: pulse 1s infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1;} 50%{ opacity:.55;} }
+
+  .notice{ font-family:'Space Mono',monospace; font-size:11.5px; color:var(--ink-soft);
+    background:#fff; border:1px dashed var(--line); border-radius:4px; padding:10px 12px; margin-bottom:22px; }
+  .notice b{ color: var(--accent); }
+
+  .q{ background:#fff; border:1px solid var(--line); border-radius:6px; padding:16px; margin-bottom:16px;
+    opacity:0; transform: translateY(10px); animation: rise .5s ease forwards; }
+  .q:nth-of-type(1){ animation-delay:.05s; }
+  .q:nth-of-type(2){ animation-delay:.12s; }
+  .q:nth-of-type(3){ animation-delay:.19s; }
+  .q:nth-of-type(4){ animation-delay:.26s; }
+  .q:nth-of-type(5){ animation-delay:.33s; }
+  @keyframes rise{ to{ opacity:1; transform:translateY(0);} }
+
+  .qnum{ font-family:'Space Mono',monospace; font-size:11px; color:var(--accent); margin-bottom:6px; }
+  .qtext{ font-size:15.5px; margin-bottom:12px; line-height:1.4; }
+  .opt{ display:flex; align-items:center; gap:10px; padding:9px 10px; border:1px solid var(--line);
+    border-radius:4px; margin-bottom:7px; cursor:pointer; font-size:14.5px; transition: background .12s, border-color .12s; }
+  .opt:hover{ background:#faf8f3; }
+  .opt.sel{ background:#e4ece6; border-color:var(--ok); }
+  .opt .bub{ width:16px; height:16px; border:1.5px solid var(--ink); border-radius:50%; flex-shrink:0; }
+  .opt.sel .bub{ background:var(--ok); border-color:var(--ok); }
+
+  button.submit{ width:100%; font-family:'Space Mono',monospace; font-weight:700; font-size:13px;
+    letter-spacing:.05em; text-transform:uppercase; background:var(--accent); color:#fff; border:none;
+    padding:14px; border-radius:4px; cursor:pointer; margin-top:6px; }
+  button.submit:active{ transform:scale(.98); }
+
+  .result{ display:none; background:#fff; border:2px solid var(--ink); border-radius:6px; padding:20px; margin-top:10px; }
+  .result h2{ margin-top:0; font-size:19px; }
+  .result .flag{ font-family:'Space Mono',monospace; font-size:12px; color:var(--bad); margin-bottom:10px; }
+  .result .score{ font-family:'Space Mono',monospace; font-size: 32px; font-weight:700; color: var(--ok); }
+  .result .breakdown{ font-size:14px; margin-top:10px; }
+  .result .breakdown .row{ display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px dotted var(--line); }
+  .correct-mark{ color:var(--ok); font-weight:700; }
+  .wrong-mark{ color:var(--bad); font-weight:700; }
+
+  .copyright{ text-align:center; font-family:'Space Mono',monospace; font-size:10.5px; color:var(--ink-soft); margin-top:26px; }
+  #examBody.locked .q, #examBody.locked button.submit{ display:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="title">
+      <div class="eyebrow">NEET 2027 · Trial Test</div>
+      <h1>5-Question Trial — Shreya</h1>
+    </div>
+    <div class="timer" id="timer">05:00</div>
+  </div>
+
+  <div class="notice"><b>Proctored mode:</b> once you tap Start, switching tabs, apps, or minimizing this window will auto-submit your test immediately. Stay on this screen until you finish.</div>
+
+  <div id="startScreen" style="text-align:center; padding: 30px 16px;">
+    <p style="font-family:'Space Mono',monospace; font-size:13px; color:var(--ink-soft); margin-bottom:18px;">
+      Timer and tab-switch detection begin only after you tap Start — not before.
+    </p>
+    <button class="submit" id="startBtn" style="max-width:260px; margin:0 auto;">Start Test</button>
+  </div>
+
+  <div id="examBody" style="display:none;">
+    <div class="q" data-correct="1">
+      <div class="qnum">Q1 · Biology — The Living World</div>
+      <div class="qtext">Binomial nomenclature ensures that a scientific name has how many components?</div>
+      <div class="opt" data-i="0"><span class="bub"></span>One</div>
+      <div class="opt" data-i="1"><span class="bub"></span>Two</div>
+      <div class="opt" data-i="2"><span class="bub"></span>Three</div>
+      <div class="opt" data-i="3"><span class="bub"></span>Four</div>
+    </div>
+
+    <div class="q" data-correct="1">
+      <div class="qnum">Q2 · Biology — Biological Classification</div>
+      <div class="qtext">The five-kingdom classification system was proposed by:</div>
+      <div class="opt" data-i="0"><span class="bub"></span>Carl Linnaeus</div>
+      <div class="opt" data-i="1"><span class="bub"></span>R.H. Whittaker</div>
+      <div class="opt" data-i="2"><span class="bub"></span>Robert Hooke</div>
+      <div class="opt" data-i="3"><span class="bub"></span>Ernst Haeckel</div>
+    </div>
+
+    <div class="q" data-correct="1">
+      <div class="qnum">Q3 · Biology — Plant Kingdom</div>
+      <div class="qtext">In angiosperms, double fertilization results in the formation of:</div>
+      <div class="opt" data-i="0"><span class="bub"></span>Only embryo</div>
+      <div class="opt" data-i="1"><span class="bub"></span>Embryo and endosperm</div>
+      <div class="opt" data-i="2"><span class="bub"></span>Only endosperm</div>
+      <div class="opt" data-i="3"><span class="bub"></span>Zygote and pollen tube</div>
+    </div>
+
+    <div class="q" data-correct="1">
+      <div class="qnum">Q4 · Physics — Units and Measurement</div>
+      <div class="qtext">The number of significant figures in 0.00450 is:</div>
+      <div class="opt" data-i="0"><span class="bub"></span>2</div>
+      <div class="opt" data-i="1"><span class="bub"></span>3</div>
+      <div class="opt" data-i="2"><span class="bub"></span>5</div>
+      <div class="opt" data-i="3"><span class="bub"></span>6</div>
+    </div>
+
+    <div class="q" data-correct="1">
+      <div class="qnum">Q5 · Chemistry — Structure of Atom</div>
+      <div class="qtext">Rutherford's alpha particle scattering experiment led to the discovery of:</div>
+      <div class="opt" data-i="0"><span class="bub"></span>Electron</div>
+      <div class="opt" data-i="1"><span class="bub"></span>Nucleus</div>
+      <div class="opt" data-i="2"><span class="bub"></span>Neutron</div>
+      <div class="opt" data-i="3"><span class="bub"></span>Proton</div>
+    </div>
+
+    <button class="submit" id="submitBtn">Submit Test</button>
+  </div>
+
+  <div class="result" id="result">
+    <h2 id="resultTitle">Test Submitted</h2>
+    <div class="flag" id="autoFlag" style="display:none;">⚠ Auto-submitted — you left the test screen.</div>
+    <div class="score" id="scoreVal">0 / 20</div>
+    <div class="breakdown" id="breakdown"></div>
+    <button class="submit" id="whatsappBtn" style="margin-top:16px;">Send Result on WhatsApp</button>
+  </div>
+
+  <div class="copyright">© 2026 Rushikesh Gilbile. All rights reserved.</div>
+</div>
+
+<script>
+const TOTAL_SECONDS = 5 * 60;
+const WHATSAPP_NUMBER = "917517907051";
+let remaining = TOTAL_SECONDS;
+let submitted = false;
+let started = false;
+let timerHandle = null;
+const answers = {}; // qIndex -> selected option index
+
+document.querySelectorAll('.opt').forEach(opt => {
+  opt.addEventListener('click', () => {
+    const qDiv = opt.closest('.q');
+    const qIndex = Array.from(document.querySelectorAll('.q')).indexOf(qDiv);
+    qDiv.querySelectorAll('.opt').forEach(o => o.classList.remove('sel'));
+    opt.classList.add('sel');
+    answers[qIndex] = parseInt(opt.dataset.i, 10);
+  });
+});
+
+const timerEl = document.getElementById('timer');
+function tick(){
+  if (submitted) return;
+  const m = Math.floor(remaining/60).toString().padStart(2,'0');
+  const s = (remaining%60).toString().padStart(2,'0');
+  timerEl.textContent = `${m}:${s}`;
+  if (remaining <= 30) timerEl.classList.add('low');
+  if (remaining <= 0){ submitTest(false, true); return; }
+  remaining--;
+}
+timerEl.textContent = '05:00';
+
+document.getElementById('startBtn').addEventListener('click', () => {
+  started = true;
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('examBody').style.display = 'block';
+  timerHandle = setInterval(tick, 1000);
+  tick();
+});
+
+function submitTest(auto, timeUp){
+  if (submitted || !started) return;
+  submitted = true;
+  clearInterval(timerHandle);
+  document.getElementById('examBody').classList.add('locked');
+
+  const questions = document.querySelectorAll('.q');
+  let correctCount = 0;
+  let wrongCount = 0;
+  let unattempted = 0;
+  let rows = '';
+
+  questions.forEach((qDiv, i) => {
+    const correct = parseInt(qDiv.dataset.correct, 10);
+    const given = answers[i];
+    let mark;
+    if (given === undefined){
+      unattempted++;
+      mark = `<span>Not attempted</span>`;
+    } else if (given === correct){
+      correctCount++;
+      mark = `<span class="correct-mark">Correct (+4)</span>`;
+    } else {
+      wrongCount++;
+      mark = `<span class="wrong-mark">Wrong (−1)</span>`;
+    }
+    rows += `<div class="row"><span>Q${i+1}</span>${mark}</div>`;
+  });
+
+  const score = correctCount*4 - wrongCount*1;
+  document.getElementById('scoreVal').textContent = `${score} / 20`;
+  document.getElementById('breakdown').innerHTML = rows +
+    `<div class="row"><span>Correct</span><span>${correctCount}</span></div>` +
+    `<div class="row"><span>Wrong</span><span>${wrongCount}</span></div>` +
+    `<div class="row"><span>Unattempted</span><span>${unattempted}</span></div>`;
+
+  document.getElementById('resultTitle').textContent = timeUp ? 'Time Up — Test Submitted' : (auto ? 'Auto-Submitted' : 'Test Submitted');
+  if (auto) document.getElementById('autoFlag').style.display = 'block';
+  document.getElementById('result').style.display = 'block';
+  window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
+
+  document.getElementById('whatsappBtn').onclick = () => {
+    const statusLine = timeUp ? 'Time up' : (auto ? 'Auto-submitted (left test screen)' : 'Completed normally');
+    const lines = [
+      "NEET 2027 — Trial Test Result (Shreya)", "",
+      `Status: ${statusLine}`,
+      `Score: ${score} / 20`,
+      `Correct: ${correctCount}  |  Wrong: ${wrongCount}  |  Unattempted: ${unattempted}`
+    ];
+    const text = encodeURIComponent(lines.join("\n"));
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank');
+  };
+}
+
+document.getElementById('submitBtn').addEventListener('click', () => submitTest(false, false));
+
+document.addEventListener('visibilitychange', () => {
+  if (started && document.hidden && !submitted) submitTest(true, false);
+});
+window.addEventListener('blur', () => {
+  if (started && !submitted) submitTest(true, false);
+});
+</script>
+</body>
+</html>
